@@ -153,6 +153,14 @@ h1 {
     clip-path: polygon(0 0, 100% 0, 100% calc(100% - 12px), 0 100%);
 }
 
+.rounded-rectangle-preview {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #f59e0b, #f97316);
+    border-radius: 50px 50px 0 0;
+}
+
 .filter-option span {
     font-weight: 500;
     color: #1a1a1a;
@@ -284,6 +292,26 @@ h1 {
     background: #333;
     transform: translateY(-1px);
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.reset-btn {
+    display: block;
+    margin: 16px auto 0;
+    padding: 12px 24px;
+    background: transparent;
+    color: #666;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.reset-btn:hover {
+    color: #333;
+    border-color: #999;
+    transform: translateY(-1px);
 }
 
 .loading {

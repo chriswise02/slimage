@@ -13,6 +13,7 @@ class ImageOptimizer {
         const downloadBtn = document.getElementById('downloadBtn');
         const downloadTopBtn = document.getElementById('downloadTopBtn');
         const downloadBottomBtn = document.getElementById('downloadBottomBtn');
+        const resetBtn = document.getElementById('resetBtn');
         const applyFilterBtn = document.getElementById('applyFilterBtn');
         const filterOptions = document.querySelectorAll('.filter-option');
 
@@ -20,6 +21,7 @@ class ImageOptimizer {
         downloadBtn.addEventListener('click', () => this.downloadProcessed());
         downloadTopBtn.addEventListener('click', () => this.downloadTop());
         downloadBottomBtn.addEventListener('click', () => this.downloadBottom());
+        resetBtn.addEventListener('click', () => this.resetApp());
         applyFilterBtn.addEventListener('click', () => this.applyFilterAndOptimize());
 
         filterOptions.forEach(option => {
@@ -87,6 +89,48 @@ class ImageOptimizer {
         document.getElementById('applyFilterBtn').disabled = false;
     }
 
+    resetApp() {
+        // Clear all stored data
+        this.originalFile = null;
+        this.originalImage = null;
+        this.processedBlob = null;
+        this.processedBlobs = null;
+        this.selectedFilter = 'none';
+        
+        // Reset file input
+        document.getElementById('imageInput').value = '';
+        
+        // Hide sections
+        document.getElementById('filterSection').style.display = 'none';
+        document.getElementById('previewSection').style.display = 'none';
+        document.getElementById('loading').style.display = 'none';
+        
+        // Reset filter selection
+        document.querySelectorAll('.filter-option').forEach(option => {
+            option.classList.remove('selected');
+        });
+        
+        // Clear image sources to free memory
+        document.getElementById('originalImage').src = '';
+        document.getElementById('optimizedImage').src = '';
+        
+        // Hide individual download buttons
+        document.getElementById('downloadTopBtn').style.display = 'none';
+        document.getElementById('downloadBottomBtn').style.display = 'none';
+        
+        // Reset labels and button text
+        document.querySelector('.image-wrapper:first-child h3').textContent = 'Original';
+        document.querySelector('.image-wrapper:last-child h3').textContent = 'Processed';
+        document.getElementById('downloadBtn').textContent = 'Download Processed Image';
+        
+        // Clear size info
+        document.getElementById('originalSize').textContent = '';
+        document.getElementById('optimizedSize').textContent = '';
+        
+        // Reset apply filter button
+        document.getElementById('applyFilterBtn').disabled = true;
+    }
+
     async applyFilterAndOptimize() {
         if (!this.originalImage) return;
 
@@ -137,6 +181,8 @@ class ImageOptimizer {
         
         if (this.selectedFilter === 'triangular-mask') {
             this.applyTriangularMask(ctx, canvas.width, canvas.height);
+        } else if (this.selectedFilter === 'rounded-rectangle') {
+            this.applyRoundedRectangleMask(ctx, canvas.width, canvas.height);
         }
         
         return canvas;
@@ -165,6 +211,33 @@ class ImageOptimizer {
         ctx.lineTo(width, height - triangleWidth); // triangleWidth up from bottom-right
         ctx.lineTo(width, height); // Bottom-right corner
         ctx.lineTo(0, height); // Back to bottom-left
+        ctx.closePath();
+        ctx.fill();
+        
+        // Reset composite operation
+        ctx.globalCompositeOperation = 'source-over';
+    }
+
+    applyRoundedRectangleMask(ctx, width, height) {
+        // Create a pill shape: flat bottom, semicircular top
+        const radius = width / 2; // Semicircle radius is half the width
+        
+        // Use destination-in to clip to the pill shape
+        ctx.globalCompositeOperation = 'destination-in';
+        
+        // Draw custom pill shape
+        ctx.beginPath();
+        // Start at bottom left
+        ctx.moveTo(0, height);
+        // Line to bottom right (flat bottom)
+        ctx.lineTo(width, height);
+        // Line up the right side to where semicircle starts
+        ctx.lineTo(width, radius);
+        // Draw semicircle arc from right to left across the top
+        ctx.arc(radius, radius, radius, 0, Math.PI, true);
+        // Line down the left side back to start
+        ctx.lineTo(0, radius);
+        // Close the path back to bottom left
         ctx.closePath();
         ctx.fill();
         
@@ -256,7 +329,7 @@ class ImageOptimizer {
 
     async optimizeCanvas(canvas, half = null) {
         return new Promise((resolve) => {
-            const maxWidth = 1920;
+            const maxWidth = 1400;
             const quality = 0.6; // 60% quality
 
             let { width, height } = canvas;
@@ -291,9 +364,27 @@ class ImageOptimizer {
         const processedImage = document.getElementById('optimizedImage');
         processedImage.src = url;
 
-        const fileSizeKB = (blob.size / 1024).toFixed(1);
-        const savings = ((this.originalFile.size - blob.size) / this.originalFile.size * 100).toFixed(1);
-        document.getElementById('optimizedSize').textContent = `Size: ${fileSizeKB} KB (${savings}% smaller)`;
+        const originalSizeKB = (this.originalFile.size / 1024).toFixed(1);
+        const processedSizeKB = (blob.size / 1024).toFixed(1);
+        const sizeDiff = blob.size - this.originalFile.size;
+        const sizeChangePercent = ((sizeDiff / this.originalFile.size) * 100).toFixed(1);
+        
+        // Update original size display
+        document.getElementById('originalSize').textContent = `Original: ${originalSizeKB} KB`;
+        
+        // Update processed size with clear before/after comparison
+        if (this.selectedFilter === 'none') {
+            // For no filter, show compression savings
+            const savings = Math.abs(parseFloat(sizeChangePercent));
+            document.getElementById('optimizedSize').textContent = `Optimized: ${processedSizeKB} KB (${savings}% smaller)`;
+        } else {
+            // For filters, show format change explanation
+            if (sizeDiff > 0) {
+                document.getElementById('optimizedSize').textContent = `Processed: ${processedSizeKB} KB (+${sizeChangePercent}% • PNG for transparency)`;
+            } else {
+                document.getElementById('optimizedSize').textContent = `Processed: ${processedSizeKB} KB (${Math.abs(parseFloat(sizeChangePercent))}% smaller • PNG format)`;
+            }
+        }
         
         // Hide individual download buttons for single image
         document.getElementById('downloadTopBtn').style.display = 'none';
@@ -320,11 +411,22 @@ class ImageOptimizer {
         document.querySelector('.image-wrapper:first-child h3').textContent = 'Top Half';
         document.querySelector('.image-wrapper:last-child h3').textContent = 'Bottom Half';
         
-        // Update file size info
+        // Calculate sizes
+        const originalSizeKB = (this.originalFile.size / 1024).toFixed(1);
         const topSizeKB = (topBlob.size / 1024).toFixed(1);
         const bottomSizeKB = (bottomBlob.size / 1024).toFixed(1);
-        document.getElementById('originalSize').textContent = `Size: ${topSizeKB} KB`;
-        document.getElementById('optimizedSize').textContent = `Size: ${bottomSizeKB} KB`;
+        const totalProcessedKB = (topBlob.size + bottomBlob.size) / 1024;
+        const sizeDiff = (topBlob.size + bottomBlob.size) - this.originalFile.size;
+        const sizeChangePercent = ((sizeDiff / this.originalFile.size) * 100).toFixed(1);
+        
+        // Update file size info with clear comparison
+        document.getElementById('originalSize').textContent = `Original: ${originalSizeKB} KB → Top: ${topSizeKB} KB`;
+        
+        if (sizeDiff > 0) {
+            document.getElementById('optimizedSize').textContent = `Bottom: ${bottomSizeKB} KB • Total: ${totalProcessedKB.toFixed(1)} KB (+${sizeChangePercent}% • PNG format)`;
+        } else {
+            document.getElementById('optimizedSize').textContent = `Bottom: ${bottomSizeKB} KB • Total: ${totalProcessedKB.toFixed(1)} KB (${Math.abs(parseFloat(sizeChangePercent))}% smaller)`;
+        }
         
         // Show individual download buttons
         document.getElementById('downloadTopBtn').style.display = 'block';
