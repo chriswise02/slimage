@@ -10,7 +10,7 @@
     <div class="container">
         <h1>SlImage</h1>
         <div class="upload-section">
-            <input type="file" id="imageInput" accept=".jpg,.jpeg" />
+            <input type="file" id="imageInput" accept=".jpg,.jpeg,.png,.webp" />
             <label for="imageInput" class="upload-btn">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
@@ -20,6 +20,28 @@
                 Upload Image
             </label>
         </div>
+
+        <div class="filter-section" id="filterSection" style="display: none;">
+            <h2>Choose a Filter</h2>
+            <div class="filter-options">
+                <div class="filter-option" data-filter="none">
+                    <div class="filter-preview">
+                        <div class="no-filter-preview">Original</div>
+                    </div>
+                    <span>No Filter</span>
+                </div>
+                <div class="filter-option" data-filter="triangular-mask">
+                    <div class="filter-preview">
+                        <div class="triangular-mask-preview">
+                            <div class="triangle-top"></div>
+                            <div class="triangle-bottom"></div>
+                        </div>
+                    </div>
+                    <span>Triangular Mask</span>
+                </div>
+            </div>
+            <button id="applyFilterBtn" class="apply-filter-btn" disabled>Apply Filter & Optimize</button>
+        </div>
         
         <div class="preview-section" id="previewSection" style="display: none;">
             <div class="image-container">
@@ -27,11 +49,13 @@
                     <h3>Original</h3>
                     <img id="originalImage" alt="Original image">
                     <p id="originalSize"></p>
+                    <button id="downloadTopBtn" class="individual-download-btn" style="display: none;">Download Top Half</button>
                 </div>
                 <div class="image-wrapper">
-                    <h3>Optimized</h3>
-                    <img id="optimizedImage" alt="Optimized image">
+                    <h3>Processed</h3>
+                    <img id="optimizedImage" alt="Processed image">
                     <p id="optimizedSize"></p>
+                    <button id="downloadBottomBtn" class="individual-download-btn" style="display: none;">Download Bottom Half</button>
                 </div>
             </div>
             
@@ -41,11 +65,11 @@
                 </div>
             </div>
             
-            <button id="downloadBtn" class="download-btn">Download Optimized Image</button>
+            <button id="downloadBtn" class="download-btn">Download Processed Image</button>
         </div>
         
         <div class="loading" id="loading" style="display: none;">
-            <p>Optimizing image...</p>
+            <p>Processing image...</p>
         </div>
     </div>
     
