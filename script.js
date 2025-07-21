@@ -7,13 +7,9 @@ class ImageOptimizer {
 
     init() {
         const imageInput = document.getElementById('imageInput');
-        const qualitySlider = document.getElementById('quality');
-        const maxWidthInput = document.getElementById('maxWidth');
         const downloadBtn = document.getElementById('downloadBtn');
 
         imageInput.addEventListener('change', (e) => this.handleFileSelect(e));
-        qualitySlider.addEventListener('input', (e) => this.updateQuality(e));
-        maxWidthInput.addEventListener('input', () => this.optimizeImage());
         downloadBtn.addEventListener('click', () => this.downloadOptimized());
     }
 
@@ -45,11 +41,6 @@ class ImageOptimizer {
         reader.readAsDataURL(file);
     }
 
-    updateQuality(event) {
-        const qualityValue = event.target.value;
-        document.getElementById('qualityValue').textContent = qualityValue;
-        this.optimizeImage();
-    }
 
     async optimizeImage() {
         if (!this.originalFile) return;
@@ -62,8 +53,8 @@ class ImageOptimizer {
             const img = new Image();
 
             img.onload = () => {
-                const maxWidth = parseInt(document.getElementById('maxWidth').value);
-                const quality = parseInt(document.getElementById('quality').value) / 100;
+                const maxWidth = 1920;
+                const quality = 0.6; // 60% quality
 
                 let { width, height } = img;
 
