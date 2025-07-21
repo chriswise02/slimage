@@ -34,7 +34,7 @@ A modern web-based image processing tool that optimizes images and applies creat
 - **Intuitive Workflow**: Upload → Select Filter → Apply → Download
 - **Visual Previews**: See exactly what each filter does before applying
 - **Multiple Download Options**: Individual downloads or batch downloads for split images
-- **Smart File Naming**: Automatic filename generation based on filter applied
+- **Smart File Naming**: Automatic filename generation with dimensions (e.g. `image-optimized-cropped-800x600.jpg`)
 - **Reset Functionality**: Easy reset to process another image
 - **Responsive Design**: Works on desktop and mobile devices
 
@@ -47,11 +47,13 @@ A modern web-based image processing tool that optimizes images and applies creat
 
 ## 📁 File Outputs
 
-| Filter Type | Format | Transparency | File Count |
-|-------------|--------|--------------|------------|
-| No Filter | JPEG | No | 1 |
-| Triangular Mask | PNG | Yes | 2 (top + bottom) |
-| Rounded Rectangle | PNG | Yes | 1 |
+| Filter Type | Format | Transparency | File Count | Example Filename |
+|-------------|--------|--------------|------------|------------------|
+| No Filter | JPEG | No | 1 | `photo-optimized-1200x800.jpg` |
+| Custom Crop | JPEG/PNG | Auto-detected | 1 | `photo-optimized-cropped-600x400.jpg` |
+| Triangular Mask | PNG | Yes | 2 (top + bottom) | `photo-optimized-top-half-1200x400.png` |
+| Rounded Rectangle | PNG | Yes | 1 | `photo-optimized-rounded-1200x800.png` |
+| Rounded Corners | PNG | Yes | 1 | `photo-optimized-rounded-corners-1200x800.png` |
 
 ## 🔧 Technical Details
 
