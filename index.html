@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Optimizer</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Image Optimizer</h1>
+        <div class="upload-section">
+            <input type="file" id="imageInput" accept=".jpg,.jpeg" />
+            <label for="imageInput" class="upload-btn">Choose JPG Image</label>
+        </div>
+        
+        <div class="preview-section" id="previewSection" style="display: none;">
+            <div class="image-container">
+                <div class="image-wrapper">
+                    <h3>Original</h3>
+                    <img id="originalImage" alt="Original image">
+                    <p id="originalSize"></p>
+                </div>
+                <div class="image-wrapper">
+                    <h3>Optimized</h3>
+                    <img id="optimizedImage" alt="Optimized image">
+                    <p id="optimizedSize"></p>
+                </div>
+            </div>
+            
+            <div class="controls">
+                <label for="quality">Quality: <span id="qualityValue">80</span>%</label>
+                <input type="range" id="quality" min="10" max="100" value="80">
+                
+                <label for="maxWidth">Max Width (px):</label>
+                <input type="number" id="maxWidth" value="1920" min="100" max="4000">
+            </div>
+            
+            <button id="downloadBtn" class="download-btn">Download Optimized Image</button>
+        </div>
+        
+        <div class="loading" id="loading" style="display: none;">
+            <p>Optimizing image...</p>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
