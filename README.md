@@ -88,6 +88,11 @@ A modern web-based image processing tool that optimizes images and applies creat
 | Triangular Mask | PNG | Yes | 2 (top + bottom) | `photo-optimized-top-half-1200x400.png` |
 | Rounded Rectangle | PNG | Yes | 1 | `photo-optimized-rounded-1200x800.png` |
 | Rounded Corners | PNG | Yes | 1 | `photo-optimized-rounded-corners-1200x800.png` |
+| Top Pinot | PNG | Yes | 1 | `photo-optimized-rounded-corners-1200x800.png` |
+| Top Red | PNG | Yes | 1 | `photo-optimized-rounded-corners-1200x800.png` |
+| Bottom Pinot | PNG | Yes | 1 | `photo-optimized-rounded-corners-1200x800.png` |
+| Bottom Red | PNG | Yes | 1 | `photo-optimized-rounded-corners-1200x800.png` |
+
 
 ## 🔧 Technical Details
 
