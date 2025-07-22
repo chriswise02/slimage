@@ -38,7 +38,7 @@ A modern web-based image processing tool that optimizes images and applies creat
 - Transparent background outside the shape
 - Single PNG output with transparency
 
-#### **Top Pinots**
+#### **Top Pinot**
 - Sets user uploaded image to 200px wide
 - Centers user uploaded image
 - Applies Pinot slant behind user image in the top half of image
