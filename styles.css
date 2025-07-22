@@ -560,15 +560,10 @@ h1 {
 }
 
 .image-comparison {
-    max-width: 100%;
-    margin: 0 auto;
-    background: #f8f9fa;
-    border-radius: 12px;
-    overflow: hidden;
-    border: 1px solid rgba(0, 0, 0, 0.06);
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
+  display: flex;
+  flex-direction: row; /* ✅ Side-by-side layout */
+  gap: 24px;
+  align-items: start;
 }
 
 .comparison-before,

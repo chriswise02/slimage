@@ -149,19 +149,22 @@ class ImageOptimizer {
         this.loadOriginalImage(file);
     }
 
-    loadOriginalImage(file) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            const img = new Image();
-            img.onload = () => {
-                this.originalImage = img;
-                this.displayOriginalImage(file, e.target.result);
-                this.showFilterSection();
-            };
-            img.src = e.target.result;
+loadOriginalImage(file) {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+            this.originalImage = img;
+            this.displayOriginalImage(file, e.target.result);
+            this.showFilterSection();
+
+            // ✅ NEW: hide upload section
+            document.querySelector('.upload-section').style.display = 'none';
         };
-        reader.readAsDataURL(file);
-    }
+        img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+}
 
     showCropSection() {
         const cropSection = document.getElementById('cropSection');
@@ -859,69 +862,73 @@ class ImageOptimizer {
         }
     }
 
-    resetApp() {
-        // Clear all stored data
-        this.originalFile = null;
-        this.originalImage = null;
-        this.croppedImage = null;
-        this.processedBlob = null;
-        this.processedBlobs = null;
-        this.selectedFilter = 'none';
-        this.cropSelection = { x: 0, y: 0, width: 0, height: 0 };
-        this.isDragging = false;
-        this.isResizing = false;
-        this.resizeDirection = '';
-        this.imageDisplayArea = { x: 0, y: 0, width: 0, height: 0 };
-        this.currentProcessedCanvas = null;
-        
-        // Clear any pending preview updates
-        if (this.previewTimeout) {
-            clearTimeout(this.previewTimeout);
-            this.previewTimeout = null;
-        }
-        
-        // Reset file input
-        document.getElementById('imageInput').value = '';
-        
-        // Hide sections
-        document.getElementById('filterSection').style.display = 'none';
-        document.getElementById('cropSection').style.display = 'none';
-        document.getElementById('previewSection').style.display = 'none';
-        document.getElementById('loading').style.display = 'none';
-        
-        // Reset filter selection
-        document.querySelectorAll('.filter-option').forEach(option => {
-            option.classList.remove('selected');
-        });
-        
-        // Clear image sources to free memory
-        document.getElementById('originalImage').src = '';
-        document.getElementById('optimizedImage').src = '';
-        
-        // Reset image labels to default
-        document.querySelector('.comparison-before .image-label').textContent = 'Original';
-        document.querySelector('.comparison-after .image-label').textContent = 'Processed';
-        
-        // Hide individual download section
-        document.getElementById('individualDownloads').style.display = 'none';
-        
-        // Reset button text
-        document.getElementById('downloadBtn').textContent = 'Download Processed Image';
-        
-        // Clear size info
-        document.getElementById('originalSize').textContent = '';
-        document.getElementById('optimizedSize').textContent = '';
-        
-        // Reset apply filter button
-        document.getElementById('applyFilterBtn').disabled = true;
-        
-        // Reset quality UI to JPEG format
-        this.updateQualityUI('image/jpeg');
-        this.updateQualityDisplay();
-        
-        // Clean up crop event listeners
-        this.cleanupCropEvents();
+resetApp() {
+    // Clear all stored data
+    this.originalFile = null;
+    this.originalImage = null;
+    this.croppedImage = null;
+    this.processedBlob = null;
+    this.processedBlobs = null;
+    this.selectedFilter = 'none';
+    this.cropSelection = { x: 0, y: 0, width: 0, height: 0 };
+    this.isDragging = false;
+    this.isResizing = false;
+    this.resizeDirection = '';
+    this.imageDisplayArea = { x: 0, y: 0, width: 0, height: 0 };
+    this.currentProcessedCanvas = null;
+
+    // Clear any pending preview updates
+    if (this.previewTimeout) {
+        clearTimeout(this.previewTimeout);
+        this.previewTimeout = null;
     }
+
+    // ✅ Re-show the upload section
+    document.querySelector('.upload-section').style.display = 'block';
+
+    // Reset file input
+    document.getElementById('imageInput').value = '';
+
+    // Hide sections
+    document.getElementById('filterSection').style.display = 'none';
+    document.getElementById('cropSection').style.display = 'none';
+    document.getElementById('previewSection').style.display = 'none';
+    document.getElementById('loading').style.display = 'none';
+
+    // Reset filter selection
+    document.querySelectorAll('.filter-option').forEach(option => {
+        option.classList.remove('selected');
+    });
+
+    // Clear image sources to free memory
+    document.getElementById('originalImage').src = '';
+    document.getElementById('optimizedImage').src = '';
+
+    // Reset image labels to default
+    document.querySelector('.comparison-before .image-label').textContent = 'Original';
+    document.querySelector('.comparison-after .image-label').textContent = 'Processed';
+
+    // Hide individual download section
+    document.getElementById('individualDownloads').style.display = 'none';
+
+    // Reset button text
+    document.getElementById('downloadBtn').textContent = 'Download Processed Image';
+
+    // Clear size info
+    document.getElementById('originalSize').textContent = '';
+    document.getElementById('optimizedSize').textContent = '';
+
+    // Reset apply filter button
+    document.getElementById('applyFilterBtn').disabled = true;
+
+    // Reset quality UI to JPEG format
+    this.updateQualityUI('image/jpeg');
+    this.updateQualityDisplay();
+
+    // Clean up crop event listeners
+    this.cleanupCropEvents();
+}
+
 
     async optimizeCanvas(canvas, half = null) {
         return new Promise(async (resolve) => {
@@ -1635,11 +1642,15 @@ async createBottomHalf() {
     async applyFilterAndOptimize() {
         if (!this.originalImage) return;
 
-        // Handle custom crop filter differently
-        if (this.selectedFilter === 'custom-crop') {
-            this.showCropSection();
-            return;
-        }
+    // Handle custom crop filter differently
+    if (this.selectedFilter === 'custom-crop') {
+        // ✅ Hide upload and filter UI when entering crop mode
+        document.querySelector('.upload-section').style.display = 'none';
+        document.getElementById('filterSection').style.display = 'none';
+
+        this.showCropSection();
+        return;
+    }
 
         document.getElementById('loading').style.display = 'block';
 
@@ -1673,6 +1684,9 @@ async createBottomHalf() {
                 
                 // Process and display the filtered image with current quality settings
                 await this.processAndDisplayImage(filteredCanvas, true);
+
+                // ✅ Hide the filter section once processing is complete
+                document.getElementById('filterSection').style.display = 'none';
             }
 
         } catch (error) {
