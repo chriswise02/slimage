@@ -952,12 +952,6 @@ class ImageOptimizer {
             // Update quality UI based on format
             this.updateQualityUI(optimalFormat);
             
-            // For PNG format, apply color quantization optimization
-            if (optimalFormat === 'image/png') {
-                const optimizedCanvas = await this.optimizePNG(canvas, quality);
-                canvas = optimizedCanvas;
-            }
-            
             // For JPEG format, implement smart size capping
             if (optimalFormat === 'image/jpeg' && this.originalFile) {
                 const optimizedBlob = await this.optimizeWithSizeCap(canvas, quality, optimalFormat);
@@ -1557,61 +1551,64 @@ class ImageOptimizer {
         ctx.drawImage(this.originalImage, imgX, imgY, imgWidth, imgHeight);
     }
 
-    async createTopHalf() {
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
-        
-        canvas.width = this.originalImage.width;
-        canvas.height = this.originalImage.height;
-        
-        // Draw the original image
-        ctx.drawImage(this.originalImage, 0, 0);
-        
-        // Apply triangular mask (top part only)
-        const triangleWidth = (canvas.width * 76) / 700;
-        
-        ctx.globalCompositeOperation = 'destination-out';
-        
-        // Only cut the top triangle, leave bottom as is
-        ctx.beginPath();
-        ctx.moveTo(0, 0);
-        ctx.lineTo(canvas.width, 0);
-        ctx.lineTo(canvas.width, 0);
-        ctx.lineTo(0, triangleWidth);
-        ctx.closePath();
-        ctx.fill();
-        
-        ctx.globalCompositeOperation = 'source-over';
-        return canvas;
-    }
+async createTopHalf() {
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
 
-    async createBottomHalf() {
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
-        
-        canvas.width = this.originalImage.width;
-        canvas.height = this.originalImage.height;
-        
-        // Draw the original image
-        ctx.drawImage(this.originalImage, 0, 0);
-        
-        // Apply triangular mask (bottom part only)
-        const triangleWidth = (canvas.width * 76) / 700;
-        
-        ctx.globalCompositeOperation = 'destination-out';
-        
-        // Only cut the bottom triangle, leave top as is
-        ctx.beginPath();
-        ctx.moveTo(0, canvas.height);
-        ctx.lineTo(canvas.width, canvas.height - triangleWidth);
-        ctx.lineTo(canvas.width, canvas.height);
-        ctx.lineTo(0, canvas.height);
-        ctx.closePath();
-        ctx.fill();
-        
-        ctx.globalCompositeOperation = 'source-over';
-        return canvas;
-    }
+    const halfHeight = this.originalImage.height / 2;
+    canvas.width = this.originalImage.width;
+    canvas.height = halfHeight;
+
+    ctx.drawImage(
+        this.originalImage,
+        0, 0, canvas.width, halfHeight,
+        0, 0, canvas.width, halfHeight
+    );
+
+    // Apply triangular top mask
+    const triangleHeight = (canvas.width * 76) / 700;
+    ctx.globalCompositeOperation = 'destination-out';
+
+    ctx.beginPath();
+    ctx.moveTo(0, 0);
+    ctx.lineTo(canvas.width, 0);
+    ctx.lineTo(0, triangleHeight);
+    ctx.closePath();
+    ctx.fill();
+
+    ctx.globalCompositeOperation = 'source-over';
+    return canvas;
+}
+
+async createBottomHalf() {
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+
+    const halfHeight = this.originalImage.height / 2;
+    canvas.width = this.originalImage.width;
+    canvas.height = halfHeight;
+
+    ctx.drawImage(
+        this.originalImage,
+        0, this.originalImage.height - halfHeight,
+        canvas.width, halfHeight,
+        0, 0, canvas.width, halfHeight
+    );
+
+    // Apply triangular bottom mask
+    const triangleHeight = (canvas.width * 76) / 700;
+    ctx.globalCompositeOperation = 'destination-out';
+
+    ctx.beginPath();
+    ctx.moveTo(0, canvas.height);
+    ctx.lineTo(canvas.width, canvas.height);
+    ctx.lineTo(canvas.width, canvas.height - triangleHeight);
+    ctx.closePath();
+    ctx.fill();
+
+    ctx.globalCompositeOperation = 'source-over';
+    return canvas;
+}
 
     selectFilter(optionElement) {
         // Remove previous selection
