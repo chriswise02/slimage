@@ -12,10 +12,13 @@ A modern web-based image processing tool that optimizes images and applies creat
 
 ### 🎨 **Creative Filters**
 
-#### **No Filter**
+#### **Compression**
 - Basic image optimization and compression
 - Outputs optimized JPEG files
 - Ideal for web use and faster loading
+
+#### **Custom Crop**
+- [Needs info]
 
 #### **Triangular Mask**
 - Splits image horizontally into two separate halves
@@ -29,6 +32,37 @@ A modern web-based image processing tool that optimizes images and applies creat
 - Perfect semicircle across the full width
 - Transparent background outside the shape
 - Single PNG output with transparency
+
+#### **Rounded Corners**
+- Creates an image with border radius on all four corners
+- Transparent background outside the shape
+- Single PNG output with transparency
+
+#### **Top Pinots**
+- Sets user uploaded image to 200px wide
+- Centers user uploaded image
+- Applies Pinot slant behind user image in the top half of image
+- Applies transparency to remaining background of the image, which is visible at the bottom
+
+#### **Top Red**
+- Sets user uploaded image to 200px wide
+- Centers user uploaded image
+- Applies Red slant behind user image in the top half of image
+- Applies transparency to remaining background of the image, which is visible at the bottom
+
+
+#### **Bottom Pinot**
+- Sets user uploaded image to 200px wide
+- Centers user uploaded image
+- Applies Pinot slant behind user image in the bottom half of image
+- Applies transparency to remaining background of the image, which is visible at the top
+
+#### **Bottom Red**
+- Sets user uploaded image to 200px wide
+- Centers user uploaded image
+- Applies Pinot slant behind user image in the bottom half of image
+- Applies transparency to remaining background of the image, which is visible at the top
+
 
 ### 🎯 **User Experience**
 - **Intuitive Workflow**: Upload → Select Filter → Apply → Download
