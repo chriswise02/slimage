@@ -2,7 +2,7 @@
   "name": "slimage",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://tyler.hanlon.github.io/slimage",
+  "homepage": "https://chriswise02.github.io/slimage",
   "dependencies": {
     "@jsquash/png": "^3.1.1",
     "lucide-react": "^0.525.0",
@@ -36,7 +36,7 @@
   },
   "devDependencies": {
     "autoprefixer": "^10.4.21",
-    "gh-pages": "^6.3.0",
+    "gh-pages": "^6.1.1",
     "postcss": "^8.5.6",
     "tailwindcss": "^3.4.15"
   }
