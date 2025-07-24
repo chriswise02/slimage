@@ -2,7 +2,7 @@
   "name": "slimage",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://chriswise02.github.io/slimage",
+  "homepage": "https://chriswise02.github.io/slimage/",
   "dependencies": {
     "@jsquash/png": "^3.1.1",
     "lucide-react": "^0.525.0",
