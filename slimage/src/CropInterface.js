@@ -191,6 +191,7 @@ const CropInterface = ({
     } else if (isResizing) {
       updateResize(e);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isDragging, isResizing, dragStart, resizeStart, cropSelection, imageDisplayArea, aspectRatio, customWidth, customHeight]);
 
   const updateDrag = (e) => {
@@ -260,6 +261,9 @@ const CropInterface = ({
       case 'w': // Left
         newX += deltaX;
         newWidth -= deltaX;
+        break;
+      default:
+        // No action needed for unknown resize direction
         break;
     }
 
@@ -337,7 +341,7 @@ const CropInterface = ({
   }, [handleMouseMove, handleMouseUp]);
 
   // Handle crop execution
-  const executeCrop = () => {
+  const executeCrop = useCallback(() => {
     if (!originalImage || !canvasRef.current) return;
 
     // Removed unused canvas variable
@@ -368,13 +372,13 @@ const CropInterface = ({
     );
 
     onCrop(outputCanvas);
-  };
+  }, [originalImage, imageDisplayArea.width, cropSelection, customWidth, customHeight, onCrop]);
 
   useEffect(() => {
     if (onCrop) {
       executeCrop();
     }
-  }, [cropSelection, customWidth, customHeight]);
+  }, [cropSelection, customWidth, customHeight, executeCrop, onCrop]);
 
   return (
     <div className="crop-interface">

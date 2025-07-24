@@ -1,16 +1,16 @@
 {
   "files": {
     "main.css": "/slimage/static/css/main.121c56ef.css",
-    "main.js": "/slimage/static/js/main.c9ecf19b.js",
+    "main.js": "/slimage/static/js/main.5560ba43.js",
     "static/js/908.7d7f600c.chunk.js": "/slimage/static/js/908.7d7f600c.chunk.js",
     "static/media/squoosh_png_bg.wasm": "/slimage/static/media/squoosh_png_bg.ee89e83aefa4929fa028.wasm",
     "index.html": "/slimage/index.html",
     "main.121c56ef.css.map": "/slimage/static/css/main.121c56ef.css.map",
-    "main.c9ecf19b.js.map": "/slimage/static/js/main.c9ecf19b.js.map",
+    "main.5560ba43.js.map": "/slimage/static/js/main.5560ba43.js.map",
     "908.7d7f600c.chunk.js.map": "/slimage/static/js/908.7d7f600c.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.121c56ef.css",
-    "static/js/main.c9ecf19b.js"
+    "static/js/main.5560ba43.js"
   ]
 }
