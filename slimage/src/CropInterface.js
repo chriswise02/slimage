@@ -59,14 +59,17 @@ const CropInterface = ({
     }
   }, [originalImage]);
 
-  // Handle aspect ratio changes and custom dimensions
+  // Handle crop area updates when aspect ratio or custom dimensions change
   useEffect(() => {
-    if (aspectRatio !== 'free' && cropSelection.width > 0) {
+    if (aspectRatio !== 'free' && aspectRatio !== 'custom') {
+      // eslint-disable-next-line no-use-before-define
       updateCropForAspectRatio();
-    } else if (customWidth && customHeight && !isNaN(parseFloat(customWidth)) && !isNaN(parseFloat(customHeight))) {
+    } else if (aspectRatio === 'custom' && customWidth && customHeight) {
+      // eslint-disable-next-line no-use-before-define
       updateCropForCustomDimensions();
     }
-  }, [aspectRatio, customWidth, customHeight]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [aspectRatio, customWidth, customHeight, cropSelection.width]);
 
   const updateCropForAspectRatio = useCallback(() => {
     let targetRatio = null;
@@ -146,26 +149,17 @@ const CropInterface = ({
   }, [customWidth, customHeight, originalImage, imageDisplayArea]);
 
   // Mouse/Touch event handlers
-  const handleMouseDown = useCallback((e) => {
-    // Check if we clicked on a resize handle
-    if (e.target.classList.contains('resize-handle')) {
-      startResize(e);
-    } else {
-      // Only start drag if we clicked on the crop area itself, not a handle
-      startDrag(e);
-    }
-  }, []);
-
   const startDrag = (e) => {
     setIsDragging(true);
-    const rect = canvasRef.current.getBoundingClientRect();
+    
     const clientX = e.clientX || (e.touches && e.touches[0].clientX);
     const clientY = e.clientY || (e.touches && e.touches[0].clientY);
     
-    // Calculate relative position within the crop area
     setDragStart({
-      x: clientX - rect.left - cropSelection.x,
-      y: clientY - rect.top - cropSelection.y
+      x: clientX,
+      y: clientY,
+      cropX: cropSelection.x,
+      cropY: cropSelection.y
     });
     
     e.preventDefault();
@@ -175,7 +169,7 @@ const CropInterface = ({
     setIsResizing(true);
     setResizeDirection(e.target.dataset.direction);
     
-    const rect = canvasRef.current.getBoundingClientRect();
+    // Removed unused rect variable
     const clientX = e.clientX || (e.touches && e.touches[0].clientX);
     const clientY = e.clientY || (e.touches && e.touches[0].clientY);
     
@@ -189,7 +183,6 @@ const CropInterface = ({
     });
     
     e.preventDefault();
-    e.stopPropagation();
   };
 
   const handleMouseMove = useCallback((e) => {
@@ -347,7 +340,7 @@ const CropInterface = ({
   const executeCrop = () => {
     if (!originalImage || !canvasRef.current) return;
 
-    const canvas = canvasRef.current;
+    // Removed unused canvas variable
     const scale = originalImage.width / imageDisplayArea.width;
 
     // Create output canvas

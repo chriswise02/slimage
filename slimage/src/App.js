@@ -166,7 +166,7 @@ export default function App() {
     } catch (error) {
       setRoundedPreviewCanvas(null);
     }
-  }, [showRoundedOptions, roundedCorners, imageProcessing.originalImageSrc]); // Use a more stable reference
+  }, [showRoundedOptions, roundedCorners, imageProcessing.originalImageSrc, imageProcessing]); // Added imageProcessing dependency
 
   // Quality control
   const handleQualityChange = async (newQuality) => {

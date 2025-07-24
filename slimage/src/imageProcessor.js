@@ -264,8 +264,8 @@ export class ImageProcessor {
     });
   }
   
-  // Load image helper (if not already exists)
-  loadImage(src) {
+  // Load image helper method for SVG processing
+  loadImageFromSrc(src) {
     return new Promise((resolve, reject) => {
       const img = new Image();
       img.crossOrigin = 'anonymous'; // Important for drawing from hosted URLs
@@ -419,7 +419,6 @@ export class ImageProcessor {
     
     const width = canvas.width;
     const height = canvas.height;
-    const triangleWidth = (width * 76) / 700;
     
     // Calculate split point (halfway down the image)
     const splitY = height / 2;
