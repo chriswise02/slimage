@@ -152,14 +152,14 @@ const CropInterface = ({
   const startDrag = (e) => {
     setIsDragging(true);
     
+    const rect = canvasRef.current.getBoundingClientRect();
     const clientX = e.clientX || (e.touches && e.touches[0].clientX);
     const clientY = e.clientY || (e.touches && e.touches[0].clientY);
     
+    // Calculate relative position within the crop area
     setDragStart({
-      x: clientX,
-      y: clientY,
-      cropX: cropSelection.x,
-      cropY: cropSelection.y
+      x: clientX - rect.left - cropSelection.x,
+      y: clientY - rect.top - cropSelection.y
     });
     
     e.preventDefault();
