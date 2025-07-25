@@ -2,6 +2,9 @@
 
 A modern React-based image processing tool that optimizes images and applies creative filters with professional-grade output. Perfect for creating social media content, web graphics, and design assets with advanced customization options.
 
+Link to tool:
+https://chriswise02.github.io/slimage/
+
 ## ✨ Features
 
 ### 🖼️ **Image Optimization**
