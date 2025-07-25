@@ -29,7 +29,8 @@ const RoundedCornersModal = ({
       title="Rounded Corners"
       maxWidth="max-w-lg"
     >
-      <div className="space-y-6">
+      {/* Scrollable Content */}
+      <div className="space-y-6 pb-4">
         {/* Preview */}
         <div>
           <label className="block text-sm font-medium mb-3 text-[#333333]">Preview:</label>
@@ -45,7 +46,7 @@ const RoundedCornersModal = ({
                     ctx.drawImage(roundedPreviewCanvas, 0, 0);
                   }
                 }}
-                className="w-full h-auto"
+                className="w-full h-auto max-h-64 object-contain"
               />
             )}
             {!roundedPreviewCanvas && (
@@ -86,7 +87,7 @@ const RoundedCornersModal = ({
         {/* Quick Presets */}
         <div className="pt-2 border-t border-[#E7E7E7]">
           <label className="block text-sm font-medium mb-3 text-[#333333]">Quick Presets:</label>
-          <div className="flex gap-2">
+          <div className="flex gap-2 flex-wrap">
             {ROUNDED_CORNER_PRESETS.map((preset) => (
               <Button
                 key={preset.name}
@@ -101,7 +102,8 @@ const RoundedCornersModal = ({
         </div>
       </div>
 
-      <div className="mt-8 text-center space-x-3">
+      {/* Fixed Action Buttons */}
+      <div className="border-t border-[#E7E7E7] pt-4 text-center space-x-3 bg-white">
         <Button variant="primary" onClick={onApply}>
           Apply Rounded Corners
         </Button>

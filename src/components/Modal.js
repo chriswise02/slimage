@@ -11,11 +11,12 @@ const Modal = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className={`bg-white rounded-xl ${maxWidth} w-full`}>
-        <div className="p-6">
+    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 overflow-y-auto">
+      <div className="min-h-full flex items-center justify-center p-4">
+        <div className={`bg-white rounded-xl ${maxWidth} w-full my-8 max-h-[calc(100vh-4rem)] flex flex-col`}>
+          {/* Header */}
           {(title || showCloseButton) && (
-            <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center justify-between p-6 pb-0 flex-shrink-0">
               {title && (
                 <h2 className="text-xl font-medium text-[#333333]">{title}</h2>
               )}
@@ -32,7 +33,11 @@ const Modal = ({
               )}
             </div>
           )}
-          {children}
+          
+          {/* Scrollable Content */}
+          <div className="flex-1 overflow-y-auto p-6 pt-6">
+            {children}
+          </div>
         </div>
       </div>
     </div>

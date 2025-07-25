@@ -22,7 +22,8 @@ const WedgeModal = ({
       title="Wedge Options"
       maxWidth="max-w-md"
     >
-      <div className="space-y-4">
+      {/* Scrollable Content */}
+      <div className="space-y-4 pb-4">
         {/* Color Options */}
         <div className="flex items-center gap-4">
           <label className="text-sm font-medium text-[#333333]">Color:</label>
@@ -79,7 +80,8 @@ const WedgeModal = ({
         </div>
       </div>
 
-      <div className="mt-8 text-center space-x-3">
+      {/* Fixed Action Buttons */}
+      <div className="border-t border-[#E7E7E7] pt-4 text-center space-x-3 bg-white">
         <Button 
           variant="primary" 
           onClick={onApply}
